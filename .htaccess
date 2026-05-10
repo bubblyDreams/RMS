@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    Options -MultiViews -Indexes
+    RewriteEngine On
+
+    # Forward static assets (Vite build output, robots, favicon, public storage
+    # symlink) to the public/ directory without exposing /public in the URL.
+    RewriteRule ^(build|storage|favicon\.ico|robots\.txt)(/.*)?$ public/$1$2 [L]
+
+    # Anything else that isn't a real file/dir at the project root goes through
+    # the shim index.php which boots Laravel via public/index.php. SCRIPT_NAME
+    # ends up as /HRMS/index.php, so generated URLs include the /HRMS prefix.
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
