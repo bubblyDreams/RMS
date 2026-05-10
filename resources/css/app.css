@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+ * Base layer overrides
+ * ------------------------------------------------------------------------- */
+@layer base {
+    html {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    body {
+        @apply bg-surface-soft text-slate-800;
+    }
+    .dark body {
+        @apply bg-surface-dark text-slate-200;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+ * Reusable component classes
+ * ------------------------------------------------------------------------- */
+@layer components {
+    .btn {
+        @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+               transition focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50;
+    }
+    .btn-primary {
+        @apply btn bg-brand-600 text-white hover:bg-brand-700 focus:ring-brand-500;
+    }
+    .btn-ghost {
+        @apply btn bg-transparent text-slate-700 hover:bg-slate-100
+               dark:text-slate-200 dark:hover:bg-slate-800 focus:ring-slate-300;
+    }
+    .form-input {
+        @apply block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm
+               placeholder-slate-400 shadow-sm focus:border-brand-500 focus:ring-brand-500
+               dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:placeholder-slate-500;
+    }
+    .card {
+        @apply rounded-xl bg-white shadow-sm ring-1 ring-slate-200/60
+               dark:bg-surface-dark-soft dark:ring-slate-700/60;
+    }
+}
+
+/* ---------------------------------------------------------------------------
+ * Sidebar layout + transitions
+ * The sidebar reads two body-level state classes:
+ *   .sidebar-collapsed   - desktop: shrink to icon-only
+ *   .sidebar-mobile-open - mobile: slide drawer in
+ * ------------------------------------------------------------------------- */
+#sidebar {
+    width: 16rem;            /* w-64 */
+    transition: width 250ms ease, transform 250ms ease;
+}
+
+/* Mobile: off-canvas by default, slides in when body has sidebar-mobile-open */
+@media (max-width: 767.98px) {
+    #sidebar {
+        position: fixed;
+        top: 0; bottom: 0; left: 0;
+        transform: translateX(-100%);
+        z-index: 40;
+    }
+    body.sidebar-mobile-open #sidebar {
+        transform: translateX(0);
+    }
+}
+
+/* Desktop: collapsed reduces width and hides labels */
+@media (min-width: 768px) {
+    body.sidebar-collapsed #sidebar { width: 4rem; }   /* w-16 */
+}
+
+/* Hide text content when collapsed (desktop) */
+body.sidebar-collapsed .sidebar-label,
+body.sidebar-collapsed .sidebar-brand-text {
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: opacity 150ms ease, width 200ms ease;
+}
+.sidebar-label,
+.sidebar-brand-text {
+    transition: opacity 200ms ease;
+}
+
+/* Theme panel (off-canvas) */
+#theme-panel {
+    transition: transform 280ms ease;
+    transform: translateX(100%);
+}
+body.theme-panel-open #theme-panel {
+    transform: translateX(0);
+}

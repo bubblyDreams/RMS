@@ -1,0 +1,25 @@
+<?php
+
+namespace App\Repositories\Eloquent;
+
+use App\Models\User;
+use App\Repositories\Contracts\UserRepositoryInterface;
+
+class UserRepository extends BaseRepository implements UserRepositoryInterface
+{
+    public function __construct(User $model)
+    {
+        parent::__construct($model);
+    }
+
+    public function findByUsername(string $username, ?int $tenantId = null): ?User
+    {
+        $query = $this->query()->where('username', $username);
+
+        if ($tenantId !== null) {
+            $query->where('tenant_id', $tenantId);
+        }
+
+        return $query->first();
+    }
+}
